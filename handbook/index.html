@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A connected Pony type system and reference capabilities handbook with compiled examples, exercises and real compiler diagnostics."><title>Pony · A practical handbook</title><style>:root {color-scheme:light dark;--bg:#faf9f5;--ink:#202a36;--muted:#5b6470;--paper:#fffefa;--line:#d9ddd9;--accent:#9b3e2b;--soft:#f1e9dc;--code:#edf0ed;--sidebar:#f0f1eb;--focus:#1b7194;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:30px}body{margin:0;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7}a{color:var(--accent);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}button,select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:8px 12px}button{cursor:pointer}button:hover{border-color:var(--accent)}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.skip{position:absolute;left:12px;top:-80px;background:var(--paper);padding:10px;z-index:3}.skip:focus{top:10px}aside{width:254px;position:fixed;inset:0 auto 0 0;padding:38px 22px;background:var(--sidebar);border-right:1px solid var(--line);overflow:auto}.brand{font-size:29px;letter-spacing:5px;font-weight:750;text-decoration:none;color:var(--ink);display:block;line-height:1.2}.brand span{display:block;letter-spacing:1.6px;font-size:10px;margin-top:9px;font-weight:600}nav{display:grid;gap:3px;margin-top:36px}nav a{font-size:13px;line-height:1.5;padding:7px 8px;text-decoration:none;color:var(--muted);border-radius:4px}nav a[aria-current]{background:var(--paper);color:var(--accent);font-weight:650}nav a:hover{background:var(--paper)}.side-note{font-size:12px;color:var(--muted);margin-top:28px}aside button{font-size:12px}main{margin-left:254px;max-width:1150px;padding:64px 72px 90px}header{padding-bottom:48px;border-bottom:1px solid var(--line)}.eyebrow{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;color:var(--accent);font-weight:650}h1{font-size:clamp(32px,4vw,49px);letter-spacing:-1.8px;line-height:1.13;margin:19px 0 24px;font-weight:700}h2{font-size:29px;line-height:1.25;letter-spacing:-.7px;margin:0 0 24px}h3{font-size:19px;line-height:1.4;margin:32px 0 10px}p{margin:0 0 17px}.lede{font-size:20px;line-height:1.6;max-width:720px}.meta,.source{font-size:12px;color:var(--muted)}.source{margin-top:28px}.callout{background:var(--soft);border-left:3px solid var(--accent);padding:20px 24px;margin:27px 0}.callout p{margin:5px 0 0}section{padding:54px 0;border-bottom:1px solid var(--line);scroll-margin-top:20px}ul,ol{padding-left:24px;margin:16px 0 24px}li{padding-left:5px;margin:8px 0}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.86em;background:var(--code);padding:2px 4px;border-radius:3px;overflow-wrap:anywhere}pre{background:var(--code);padding:20px 24px;border-radius:5px;overflow:auto;font-size:14px;line-height:1.65;margin:22px 0}pre code{background:transparent;padding:0;font-size:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;margin:24px 0;font-size:14px;line-height:1.6}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:12px 10px}th{font-size:11px;text-transform:uppercase;letter-spacing:.6px;background:var(--sidebar)}td:first-child{padding-left:10px}figure.program{margin:24px 0}figcaption{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;padding:10px 15px;background:var(--sidebar);border-radius:5px 5px 0 0}figcaption a{overflow-wrap:anywhere}figure pre{margin:0;border-radius:0 0 5px 5px}.copy{font-size:11px;white-space:nowrap;padding:5px 8px}.output{font-size:13px;color:var(--muted);padding-left:14px;border-left:2px solid var(--line)}details{border:1px solid var(--line);border-radius:5px;padding:15px 18px;margin:22px 0;background:var(--paper)}summary{cursor:pointer;font-weight:600;line-height:1.5}details[open] summary{margin-bottom:15px}details p:last-child,details ol:last-child{margin-bottom:0}.exercise summary{color:var(--accent)}.failure{margin-bottom:12px}.failure summary{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px}.failure pre{font-size:12px}.diagnostic-label{font-size:12px;font-weight:600}.lab{display:grid;gap:14px;background:var(--sidebar);padding:22px;border-radius:5px;margin:25px 0}.lab label{font-weight:600}.lab select{width:100%;max-width:100%}.lab p{margin:0}footer{font-size:12px;color:var(--muted);padding-top:30px}.closing{margin-top:32px;font-size:19px}#copy-status{position:fixed;bottom:18px;right:18px;background:var(--ink);color:var(--bg);border-radius:5px;padding:0}#copy-status:not(:empty){padding:8px 14px}
+@media(prefers-color-scheme:dark){:root{--bg:#181d23;--ink:#e5e8e8;--muted:#b2bbc4;--paper:#20272e;--line:#414951;--accent:#f1b094;--soft:#302d28;--code:#242c33;--sidebar:#1d242a;--focus:#72c0de}}
+@media(min-width:1600px){main{margin-left:max(254px,calc((100vw - 1340px)/2 + 254px))}aside{width:max(254px,calc((100vw - 1340px)/2 + 254px));padding-left:max(22px,calc((100vw - 1340px)/2 + 22px))}}
+@media(max-width:1050px){main{padding:45px 36px 70px}aside{width:224px;padding:30px 16px}main{margin-left:224px}h1{font-size:37px}}
+@media(max-width:760px){html{scroll-padding-top:16px}aside{position:static;width:auto;padding:24px;border-right:0;border-bottom:1px solid var(--line)}.brand{font-size:24px}.brand span{font-size:9px}nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;margin-top:20px}nav a{font-size:12px;padding:7px 3px}.side-note{display:none}aside button{margin-top:16px}main{margin:0;max-width:none;padding:35px 22px 60px}h1{font-size:34px;letter-spacing:-1px}h2{font-size:25px}.lede{font-size:18px}section{padding:38px 0}table{font-size:12px}th,td{padding:10px 6px}pre{padding:16px;font-size:12px}.callout{padding:17px}.meta{font-size:11px}body{font-size:15px}figcaption{align-items:flex-start}.lab{padding:16px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{:root{color-scheme:light;--bg:white;--ink:black;--muted:#333;--paper:white;--line:#aaa;--accent:#333;--soft:#eee;--code:#f1f1f1;--sidebar:#eee}aside,.copy,#print,#copy-status,.skip{display:none}main{margin:0;max-width:none;padding:0;font-size:10pt}h1{font-size:28pt}h2{font-size:20pt}section{padding:25px 0;break-before:page;border:0}h2,h3,summary,figcaption{break-after:avoid}pre{white-space:pre-wrap;overflow:visible;font-size:8pt}pre code{white-space:pre-wrap;overflow-wrap:anywhere}table{font-size:9pt}details{break-inside:avoid}a{color:inherit}header{border:0}.lab{display:none}}
+</style></head>
+<body><a class="skip" href="#main">Skip to handbook</a>
+<aside><a class="brand" href="#start">PONY<span>THE PRACTICAL HANDBOOK</span></a><nav aria-label="Chapters"><a href="#route">00 · Your route</a><a href="#local">01 · A local program</a><a href="#types">02 · Read a complete type</a><a href="#caps">03 · The six capabilities</a><a href="#views">04 · Receivers and views</a><a href="#aliases">05 · Aliases, consume and ^</a><a href="#freeze">06 · Build and freeze</a><a href="#actors">07 · Actor boundaries</a><a href="#generics">08 · Generics and arrows</a><a href="#trn">09 · Builders and destructive read</a><a href="#capstone">10 · Finish a small program</a><a href="#errors">11 · A compiler-error clinic</a><a href="#desk">12 · Desk reference</a></nav><p class="side-note">One connected example.<br>Read · predict · run · explain.</p><button type="button" id="print">Print / save PDF</button></aside>
+<main id="main"><header id="start">
+<p class="eyebrow">A practical Pony handbook · Java / Kotlin edition</p>
+<h1>Types you can reason about.<br>Programs you can finish.</h1>
+<p class="lede">One notebook, eight runnable stages, and a way to explain every capability choice. Start with local objects; add concurrency only after the ownership story is clear.</p>
+<p class="meta">Prepared 12 November 2026 · Updated and checked 19 November 2026 with Pony 0.78.2 · No third-party packages</p>
+<div class="callout"><strong>The central question</strong><p>For each reference, ask: what may I do through it, and what other references are allowed to exist? Pony checks both. Most capability errors become understandable once you name the alias that a line would create.</p></div>
+</header>
+<section id="route" data-title="00 · Your route">
+<h2>00 · How to use this handbook</h2>
+<p>You already know how to program. The work here is replacing a few Java/Kotlin assumptions with Pony rules. Each runnable directory is a complete, independent snapshot of the same tiny application. Repeated definitions are intentional: compile one stage without importing unfinished lessons.</p>
+<table><thead><tr><th>Pass</th><th>Read</th><th>What you should be able to do</th></tr></thead><tbody>
+<tr><td>First working program</td><td><a href="#local">01</a>–<a href="#views">04</a></td><td>Write classes, unions and collections; choose <code>ref</code> and <code>box</code>.</td></tr>
+<tr><td>Move and share</td><td><a href="#aliases">05</a>–<a href="#actors">07</a></td><td>Explain <code>consume</code>, build <code>val</code>, send <code>iso</code>.</td></tr>
+<tr><td>Read library signatures</td><td><a href="#generics">08</a>–<a href="#trn">09</a></td><td>Read arrows, generic bounds and ephemeral results.</td></tr>
+<tr><td>Put it together</td><td><a href="#capstone">10</a>, <a href="#errors">11</a>, <a href="#desk">12</a></td><td>Build a command-line tool and repair errors deliberately.</td></tr>
+</tbody></table>
+<p>Work in short sessions. Read a chapter, predict the example’s output, run it, then do its exercise before opening the answer. If an explanation feels abstract, follow its link back to the actual notebook code.</p>
+<h3>Run the material</h3>
+<pre><code>git clone https://github.com/littleli/pony-practical-handbook.git
+cd pony-practical-handbook
+mkdir -p .build
+ponyc examples/01-local -o .build -b local
+./.build/local
+
+# Compile and run all eight working programs;
+# confirm all eight broken programs fail for their intended reason.
+python3 verify.py</code></pre>
+<p><code>ponyc</code> compiles a directory (a Pony package), including the <code>.pony</code> files in it. Keep the failure cases in their own directories. The verifier writes binaries and diagnostic logs into <code>.build/</code>. It records a successful full run in <a href="../verification.json">verification.json</a>.</p>
+<p><strong>Scope:</strong> ordinary safe Pony and small programs. FFI, networking, runtime tuning, advanced generic specialization and formal proofs can wait. Object capabilities are introduced only where passing <code>OutStream</code> makes them concrete.</p>
+</section>
+<section id="local" data-title="01 · A local program">
+<h2>01 · Start with an ordinary mutable object</h2>
+<p>The notebook has a title and a growing list of notes. <code>Main</code> is an actor because a Pony executable starts there; the notebook itself is an ordinary class. Using Pony does not require turning every object into an actor.</p>
+<figure class="program"><figcaption><a href="../examples/01-local/main.pony">examples/01-local/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>class Notebook
+  let title: String
+  let _notes: Array[String] = Array[String]
+
+  new create(title&#x27;: String) =&gt;
+    title = title&#x27;
+
+  fun ref add(note: String) =&gt;
+    _notes.push(note)
+
+  fun box size(): USize =&gt;
+    _notes.size()
+
+actor Main
+  new create(env: Env) =&gt;
+    let book: Notebook ref = Notebook(&quot;Pony lab&quot;)
+    let same_book: Notebook ref = book
+    same_book.add(&quot;Understand ref&quot;)
+    env.out.print(book.title + &quot;: &quot; + book.size().string())
+</code></pre></figure>
+<p class="output">Expected output: <code>Pony lab: 1</code></p>
+<h3>Read the unfamiliar syntax once</h3>
+<ul>
+<li><code>class Notebook</code>: a concrete object type. Pony has no class inheritance; reuse and abstraction use composition, traits and interfaces.</li>
+<li><code>let title: String</code>: initialize the field once. The title’s type is immutable <code>String val</code>; the standard String type defaults to <code>val</code>.</li>
+<li><code>let _notes: Array[String]</code>: a fixed field binding to a mutable array. The underscore makes the field private to this type. <code>let</code> does not freeze the array.</li>
+<li><code>new create</code>: a named constructor. <code>title'</code> is just a legal parameter name, pronounced “title prime.” All fields must be initialized.</li>
+<li><code>fun ref add</code>: a synchronous method that needs mutable access to its receiver, <code>this</code>.</li>
+<li><code>fun box size(): USize</code>: a synchronous method that reads its receiver. The last expression supplies its return value. <code>USize</code> is an unsigned machine-sized integer.</li>
+<li><code>env.out.print</code>: send an output message using the output stream supplied by the runtime.</li>
+</ul>
+<p><code>book</code> and <code>same_book</code> identify the same object. Calling <code>add</code> through either reference changes the array that <code>size</code> reads. This is aliasing, exactly as two Java variables can point to one object. The <code>ref</code> annotations make that intent explicit.</p>
+<h3>Java / Kotlin bridge</h3>
+<p>Pony <code>let</code> resembles Java <code>final</code> or Kotlin <code>val</code> <em>on a binding</em>. Pony <code>val</code>, the reference capability, is a different word in a different role: it promises immutable access with no writable aliases. Keep “can I reassign this variable?” separate from “can this object change?”</p>
+<details class="exercise"><summary>Exercise 1 · Add a second note through book. What prints?</summary><p>Insert <code>book.add("Understand aliases")</code> before the print. The result is <code>Pony lab: 2</code>. Both references see the same notebook. Replacing <code>let book</code> with <code>var book</code> would permit rebinding the variable, but is unnecessary for mutating the object.</p></details>
+<p class="source">Reference: <a href="https://tutorial.ponylang.io/types/classes.html">Classes</a> and <a href="https://tutorial.ponylang.io/expressions/variables">Variables</a>.</p>
+</section>
+<section id="types" data-title="02 · Read a complete type">
+<h2>02 · Separate the object type from the reference type</h2>
+<p>Read <code>Array[String val] ref</code> from the inside out: each element is a String usable as <code>val</code>; the outer object is an Array usable as <code>ref</code>. These are two independent capability positions. <code>Array[String] val</code> changes the array’s capability. <code>Array[String ref] ref</code> instead describes an array of mutable String references.</p>
+<div class="callout"><strong>Two checks for every value</strong><p>Does the value provide the required type or methods? Does this reference provide the required access and alias guarantees? Having a method named <code>add</code> does not make it callable through <code>box</code>.</p></div>
+<table><thead><tr><th>Notation</th><th>Read it as</th><th>Java / Kotlin comparison</th></tr></thead><tbody>
+<tr><td><code>Notebook ref</code></td><td>A Notebook with local mutable access</td><td>An ordinary mutable object reference, with stronger actor restrictions</td></tr>
+<tr><td><code>Notebook box</code></td><td>A readable view; somebody else may mutate it</td><td>Similar intent to a read-only API; enforced on this reference</td></tr>
+<tr><td><code>(String | None)</code></td><td>One value: a String or the singleton None</td><td>Optional/nullable intent, but explicit alternatives</td></tr>
+<tr><td><code>(String, USize)</code></td><td>Two values together in a tuple</td><td>A Pair or tiny record</td></tr>
+<tr><td><code>(Named box &amp; Counted box)</code></td><td>One value satisfying both contracts</td><td>An intersection bound</td></tr>
+<tr><td><code>type MaybeNote is (String | None)</code></td><td>A transparent alias for that type expression</td><td>A Kotlin typealias, not a new wrapper class</td></tr>
+</tbody></table>
+<h3>Nominal and structural contracts</h3>
+<p>A Pony <code>trait</code> requires a declared relationship, such as <code>class Notebook is Named</code>. A Pony <code>interface</code> can be satisfied structurally: having compatible methods is enough. Unlike a Java interface, the caller can use a Pony interface that the implementer did not explicitly name. Traits and interfaces can also provide default methods; adopting defaults requires the declared relationship.</p>
+<figure class="program"><figcaption><a href="../examples/02-types/main.pony">examples/02-types/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>interface box Counted
+  fun box size(): USize
+
+trait box Named
+  fun box name(): String
+
+class Notebook is Named
+  let _notes: Array[String] = Array[String]
+  fun ref add(note: String) =&gt; _notes.push(note)
+  fun box size(): USize =&gt; _notes.size()
+  fun box name(): String =&gt; &quot;Pony lab&quot;
+  fun box first(): (String | None) =&gt;
+    try _notes(0)? else None end
+
+primitive Describe
+  fun apply(value: (Named box &amp; Counted box)): String =&gt;
+    value.name() + &quot;: &quot; + value.size().string()
+
+actor Main
+  new create(env: Env) =&gt;
+    let book: Notebook ref = Notebook
+    book.add(&quot;Understand unions&quot;)
+    env.out.print(Describe(book))
+    match book.first()
+    | let note: String =&gt; env.out.print(note)
+    | None =&gt; env.out.print(&quot;empty&quot;)
+    end
+    let pair: (String, USize) = (book.name(), book.size())
+    env.out.print(pair._1 + &quot;: &quot; + pair._2.string())
+</code></pre></figure>
+<p class="output">Expected output:<br><code>Pony lab: 1<br>Understand unions<br>Pony lab: 1</code></p>
+<p><code>Notebook</code> declares <code>Named</code>. It satisfies <code>Counted</code> because its <code>size</code> method has the right signature. <code>Describe</code> is a <code>primitive</code>: a fieldless singleton, useful for stateless utility methods or marker values. <code>Describe(book)</code> invokes its <code>apply</code> method. Tuple positions use <code>._1</code>, <code>._2</code>, and so on.</p>
+<h3>Absence and partial operations are different</h3>
+<p><code>first()</code> returns a union that explicitly represents absence. Array lookup <code>_notes(0)?</code> is a partial operation: it can raise Pony’s <code>error</code> when the index is invalid. The <code>try … else … end</code> converts that possibility into <code>None</code>. A <code>match</code> then handles the alternatives.</p>
+<p>The <code>?</code> at a call site means “this operation may raise an error.” It is not Kotlin’s nullable-type suffix or safe-call operator. To propagate an error, mark the enclosing <code>fun</code> partial too, with <code>?</code> after its result type. Pony’s error carries no Java-style exception object; if callers need failure details, model a result union with data. A <code>try</code> without <code>else</code> handles an error by producing <code>None</code>.</p>
+<details class="exercise"><summary>Exercise 2 · Remove book.add. Which lines change?</summary><p><code>Describe</code> reports <code>Pony lab: 0</code>, the match prints <code>empty</code>, and the tuple reports <code>Pony lab: 0</code>. No null dereference occurs: the absence is part of the result type.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/types/type-expressions">Type expressions</a>, <a href="https://tutorial.ponylang.io/types/traits-and-interfaces">Traits and interfaces</a>, <a href="https://tutorial.ponylang.io/expressions/errors">Errors</a>.</p>
+</section>
+<section id="caps" data-title="03 · The six capabilities">
+<h2>03 · The six capabilities, as design choices</h2>
+<p>A capability belongs to a <em>reference</em>. The same object can be reached through different compatible reference capabilities. “This object is box” is usually less precise than “this reference is box.” The stronger promise of <code>val</code> comes from what it guarantees about <em>all</em> writable aliases.</p>
+<p>Why control aliases at all? Suppose one actor mutates an array while another reads its elements. Giving only the second actor a read-only interface does not stop the first actor changing the array concurrently. Pony must control what other actors can access, not just what the current reference can call.</p>
+<table><thead><tr><th>Capability</th><th>Through this reference</th><th>Other access that can coexist</th><th>Typical choice</th></tr></thead><tbody>
+<tr><td><code>ref</code></td><td>Read and write</td><td>Local readers and writers; no other actor can read/write this mutable state</td><td>Your actor’s ordinary working objects</td></tr>
+<tr><td><code>box</code></td><td>Read</td><td>May coexist with a local writer; may instead view immutable data</td><td>A synchronous reader method or parameter</td></tr>
+<tr><td><code>val</code></td><td>Read</td><td>Other readers, including other actors; no writable alias</td><td>Configuration, published results, immutable messages</td></tr>
+<tr><td><code>iso</code></td><td>Read and write under isolation rules</td><td>Identity-only aliases; no other readable/writable alias to the isolated object</td><td>A mutable parcel whose ownership moves</td></tr>
+<tr><td><code>trn</code></td><td>Read and write as the unique writer</td><td>Local read-only aliases; no other writer and no reader in another actor</td><td>A builder that will become immutable</td></tr>
+<tr><td><code>tag</code></td><td>Identity; tag methods; actor message sends</td><td>Makes no read/write guarantee about other references</td><td>An actor address or opaque identity</td></tr>
+</tbody></table>
+<p><strong>Sendable capabilities:</strong> <code>iso</code>, <code>val</code>, <code>tag</code>. A named <code>iso</code> must be moved when sending it. <code>trn</code>, <code>ref</code> and <code>box</code> cannot be behavior parameter capabilities. This is why “but my function only reads it” is insufficient at an actor boundary.</p>
+<p><code>tag</code> does not mean “useless object.” You can send a behavior message to an actor through <code>tag</code>. You can also call a <code>fun tag</code> method, whose implementation cannot inspect receiver fields. You cannot call an ordinary field-reading <code>fun box</code> method through it.</p>
+<p><code>val</code> protects the readable object graph, not just the outer binding. Opaque <code>tag</code> references inside an immutable object can still identify mutable actors; sending those actors messages does not turn the immutable object’s own state mutable.</p>
+<h3>Choose from the job, not from the error message</h3>
+<div class="lab"><label for="cap-job">What does this value need to do?</label><select id="cap-job"><option value="ref">Stay local and change</option><option value="box">Be inspected synchronously</option><option value="val">Be shared as a stable result</option><option value="iso">Move as mutable state to another actor</option><option value="trn">Have one writer now, become immutable later</option><option value="tag">Identify or message an actor</option></select><p id="cap-answer" aria-live="polite"></p></div>
+<details class="exercise"><summary>Exercise 3 · Pick types for a worker address, a local scratch list, and a shared report.</summary><p><code>Worker tag</code>, <code>Array[String] ref</code>, and <code>Array[String] val</code>. The report can be sent repeatedly. The scratch list belongs to the current actor. The worker is contacted with a behavior, rather than by reading its fields.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/reference-capabilities/guarantees.html">Capability guarantees</a> and <a href="https://tutorial.ponylang.io/reference-capabilities/passing-and-sharing">Passing and sharing</a>.</p>
+</section>
+<section id="views" data-title="04 · Receivers and views">
+<h2>04 · A read-only view is not a frozen object</h2>
+<p>There are three capability positions in <code>fun box notes(): Array[String] box</code>. The first <code>box</code> is the capability required for <code>this</code>. The final <code>box</code> describes the returned array reference. Each <code>String</code> element defaults to <code>val</code>. Read each position separately.</p>
+<figure class="program"><figcaption><a href="../examples/03-views/main.pony">examples/03-views/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>class Notebook
+  let _notes: Array[String] = Array[String]
+  fun ref add(note: String) =&gt; _notes.push(note)
+  fun box size(): USize =&gt; _notes.size()
+  fun box notes(): Array[String] box =&gt; _notes
+  fun ref editable_notes(): Array[String] ref =&gt; _notes
+  fun box first(): (String | None) =&gt;
+    try _notes(0)? else None end
+
+actor Main
+  new create(env: Env) =&gt;
+    let book: Notebook ref = Notebook
+    let view: Notebook box = book
+    book.add(&quot;box is a view&quot;)
+    env.out.print(view.size().string())
+    let edit = book.editable_notes()
+    edit.push(&quot;let is not deep immutability&quot;)
+    env.out.print(view.notes().size().string())
+</code></pre></figure>
+<p class="output">Expected output: <code>1</code>, then <code>2</code>.</p>
+<p><code>view</code> cannot call <code>add</code>, but it observes changes made through <code>book</code>. <code>editable_notes()</code> explicitly exposes a mutable alias; this is legal locally, though a real API might keep mutation behind <code>add</code> to protect its invariants. This method is here to make the distinction visible.</p>
+<h3>Why the getter cannot return ref from a box receiver</h3>
+<p>Inside <code>fun box notes</code>, <code>this</code> is only readable. Although the field is declared <code>Array[String] ref</code>, reading it through that receiver gives a <code>box</code> view. Otherwise a caller could obtain mutable access through a read-only notebook. This combination of receiver capability and field capability is <strong>viewpoint adaptation</strong>.</p>
+<table><thead><tr><th>Origin reference</th><th>A declared ref field is seen as</th><th>Reason</th></tr></thead><tbody>
+<tr><td><code>ref</code></td><td><code>ref</code></td><td>Local mutable access is available.</td></tr>
+<tr><td><code>box</code></td><td><code>box</code></td><td>A readable origin must not expose a writer.</td></tr>
+<tr><td><code>val</code></td><td><code>val</code></td><td>The readable state is immutable.</td></tr>
+<tr><td><code>trn</code></td><td><code>box</code></td><td>Do not leak a second writer.</td></tr>
+<tr><td><code>iso</code></td><td><code>tag</code></td><td>Do not leak a reader or writer from the isolated graph.</td></tr>
+<tr><td><code>tag</code></td><td>No field access</td><td>Only identity access is available.</td></tr>
+</tbody></table>
+<p>This table is specifically about a <code>ref</code> field. A <code>val</code> field stays readable as <code>val</code> from readable origins, including <code>iso</code>. Also distinguish adapting a field access from storing a new alias to an <code>iso</code> field: storage must preserve alias guarantees too.</p>
+<h3>Useful defaults, and a reason to annotate</h3>
+<p>A plain <code>fun</code> defaults to a <code>box</code> receiver; an omitted result type defaults to <code>None</code>. An ordinary class type defaults to <code>ref</code>, unless the declaration gives a different default. Actors default to <code>tag</code>, primitives to <code>val</code>, and String declares a <code>val</code> default. Constructor expressions can also benefit from recovery: an inferred local initialized with a constructor is not guaranteed to be <code>ref</code>. In this compiler, several unannotated Notebook locals inferred as <code>iso</code>. Writing <code>let book: Notebook ref = Notebook</code> makes the intended local-aliasing design explicit.</p>
+<details class="exercise"><summary>Exercise 4 · Can view.add work? Could notes() return Array[String] val?</summary><p><code>view.add</code> cannot work because <code>box</code> does not supply the mutable receiver that <code>fun ref</code> requires. Returning <code>val</code> is also invalid for the existing array: <code>book</code> retains a writer. Return a <code>box</code> view, or create a separate immutable snapshot as in chapter 06.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/reference-capabilities/combining-capabilities.html">Combining capabilities</a>, <a href="https://tutorial.ponylang.io/reference-capabilities/recovering-capabilities.html">Receiver recovery</a>.</p>
+</section>
+<section id="aliases" data-title="05 · Aliases, consume and ^">
+<h2>05 · Copying a reference and moving a reference</h2>
+<p>When a named value is assigned, passed as an argument, or used as a method receiver, ask what reference the new name would hold. Ordinary <code>ref</code>, <code>val</code>, <code>box</code> and <code>tag</code> references can produce aliases with their own capability. Unique references require more care.</p>
+<pre><code>// Deliberately broken: two isolated owners would exist.
+let parcel: Array[String] iso = recover iso Array[String] end
+let second: Array[String] iso = parcel
+
+</code></pre>
+<p>Corrected version, starting from the same fresh parcel:</p>
+<pre><code>let parcel: Array[String] iso = recover iso Array[String] end
+let second: Array[String] iso = consume parcel
+// parcel cannot be read now. second owns the isolated reference.</code></pre>
+<p><code>consume</code> invalidates the old local or parameter binding and yields its value. It neither copies the array nor destroys it. A consumed <code>var</code> can be assigned a new value before reuse; an existing alias is not erased by consuming a different variable.</p>
+<table><thead><tr><th>Named reference</th><th>Safe ordinary alias capability</th><th>What moving changes</th></tr></thead><tbody>
+<tr><td><code>iso</code></td><td><code>tag</code></td><td>Moving can preserve iso or give up uniqueness to choose another capability.</td></tr>
+<tr><td><code>trn</code></td><td><code>box</code></td><td>Moving the unique writer can freeze to val, or become ordinary ref.</td></tr>
+<tr><td><code>ref / val / box / tag</code></td><td>The same capability</td><td>Consuming one name does not prove other aliases absent.</td></tr>
+</tbody></table>
+<h3>Read ^ and ! without mysticism</h3>
+<p><code>Array[String] iso^</code> is an <em>ephemeral expression type</em>: the isolated value is being handed over, rather than accessed through a retained name. <code>consume parcel</code> produces that kind of value. Storing it in <code>let second: Array[String] iso</code> gives it a new owner; <code>second</code> is now a named iso again. The caret is not a seventh capability and not an allocation operation.</p>
+<p><code>A!</code> means the safe alias type of generic type <code>A</code>. If A is iso, its alias capability is tag; if A is trn, box. This appears in generic collection signatures, because reading an element must not duplicate a unique owner.</p>
+<h3>A small, useful subtyping picture</h3>
+<pre><code>ref ──→ box ──→ tag
+val ──→ box ──→ tag
+
+Moving iso^ can supply any of the six capabilities.
+Moving trn^ can become val or ref (and their weaker views).</code></pre>
+<p>The arrows mean “can satisfy a requirement for,” not “automatically mutate the variable’s declared type.” Do not add an arrow from <code>ref</code> to <code>val</code>: having a writer tells the compiler nothing about other writers. <code>consume ref_variable</code> still cannot freeze an arbitrarily aliased object.</p>
+<p>There is a further distinction between <em>creating a lasting alias</em> and <em>temporary receiver access</em>. Some calls such as <code>parcel.push("note")</code> are legal through iso because the compiler can recover the receiver after the call. Sendable arguments and a safe or unused result matter. If a call fails, inspect the full signature; do not conclude that iso objects cannot be mutated.</p>
+<details class="exercise"><summary>Exercise 5 · Why does consuming a ref not make it immutable?</summary><p>Another variable may still hold a mutable reference. Consuming one name does not invalidate that other name. Starting with iso or trn supplies the missing uniqueness guarantee; creating a fresh graph inside recover is the other common route.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/reference-capabilities/aliasing.html">Aliasing</a>, <a href="https://tutorial.ponylang.io/reference-capabilities/consume-and-destructive-read">Consume</a>, <a href="https://tutorial.ponylang.io/reference-capabilities/capability-subtyping">Capability subtyping</a>.</p>
+</section>
+<section id="freeze" data-title="06 · Build and freeze">
+<h2>06 · Publish a snapshot without freezing your working state</h2>
+<p>The notebook stays mutable. A snapshot is a <em>different array</em>, populated with the same immutable String values. You can continue editing the notebook after taking it. This is often the most comfortable design for small programs: use local mutable state, publish stable results.</p>
+<figure class="program"><figcaption><a href="../examples/04-freeze/main.pony">examples/04-freeze/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>class Notebook
+  let _notes: Array[String] = Array[String]
+  fun ref add(note: String) =&gt; _notes.push(note)
+  fun box snapshot(): Array[String] val =&gt;
+    let result = recover trn Array[String] end
+    for note in _notes.values() do result.push(note) end
+    consume val result
+
+actor Main
+  new create(env: Env) =&gt;
+    let book: Notebook ref = Notebook
+    book.add(&quot;first&quot;)
+    let frozen = book.snapshot()
+    book.add(&quot;second&quot;)
+    env.out.print(frozen.size().string())
+    let built: Array[String] val = recover val
+      let notes = Array[String]
+      notes.push(&quot;built inside recover&quot;)
+      notes
+    end
+    env.out.print(built.size().string())
+</code></pre></figure>
+<p class="output">Expected output: <code>1</code>, then <code>1</code>.</p>
+<h3>Trace the snapshot’s references</h3>
+<ol>
+<li><code>recover trn Array[String] end</code> creates a fresh array and returns a write-unique reference.</li>
+<li>The loop reads the notebook’s local array through the box receiver. Each element is an immutable String and can be shared into the new array.</li>
+<li><code>result.push(note)</code> fills the new array. Only <code>result</code> can write to it.</li>
+<li><code>consume val result</code> gives up the unique writer and returns an immutable array. The notebook’s original array is unaffected.</li>
+</ol>
+<p>If the element type were a mutable <code>Note ref</code>, reusing those references would not produce a deeply immutable snapshot. You would need immutable note objects, a conversion that builds immutable copies, or another ownership design. Changing the outer Array capability cannot repair mutable aliases inside it.</p>
+<h3>What recover proves</h3>
+<p>The second block constructs its entire array inside <code>recover val … end</code>, mutates it locally, then returns it as immutable. Mutable aliases created inside the region cannot escape as writers to the result. Captures from outside are restricted: arbitrary <code>ref</code> and <code>box</code> references cannot simply be pulled into the region and relabeled. Sendable captures are the normal allowed inputs; any iso input must still obey move rules.</p>
+<p>Think of <code>recover</code> as a scope in which the compiler can establish stronger guarantees. It is not a runtime lock, a deep-copy request, a cast, or exception recovery. In this example, allocation and copying happen because we explicitly create another array and loop over the strings.</p>
+<pre><code>// Deliberately broken: an outer writer may still exist.
+let notes: Array[String] ref = Array[String]
+let frozen: Array[String] val = recover val notes end</code></pre>
+<p>The snapshot method deliberately allocates its trn result in a tiny recover region, then fills it outside that region. That lets the loop read the notebook’s non-sendable local state while only copying sendable Strings. Another valid design would perform the whole build inside recover if all required inputs were already sendable.</p>
+<details class="exercise"><summary>Exercise 6 · Make two snapshots around an edit. What sizes should they have?</summary><p>Take the first snapshot after adding one note, add another note, then take a second snapshot. Their sizes are 1 and 2. Keeping both is safe; neither snapshot changes when the notebook is edited again.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/reference-capabilities/recovering-capabilities.html">Recovering capabilities</a> and <a href="https://www.ponylang.io/faq/code/">Code FAQ: converting ref to val</a>.</p>
+</section>
+<section id="actors" data-title="07 · Actor boundaries">
+<h2>07 · A message is an ownership boundary</h2>
+<p>A <code>fun</code> call runs synchronously. A <code>be</code> call enqueues a behavior for execution by the receiving actor. Other actors may execute at the same time, so message arguments must be sendable. The receiver runs one behavior at a time, which makes its own mutable state a natural place for ordinary <code>ref</code> objects.</p>
+<figure class="program"><figcaption><a href="../examples/05-transfer/main.pony">examples/05-transfer/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>actor Archivist
+  let _out: OutStream
+  new create(out: OutStream) =&gt; _out = out
+  be accept(notes: Array[String] iso) =&gt;
+    // Keep mutable state local after receiving ownership.
+    let local: Array[String] ref = consume notes
+    local.push(&quot;archived&quot;)
+    _out.print(local.size().string())
+
+actor Main
+  new create(env: Env) =&gt;
+    let archive: Archivist tag = Archivist(env.out)
+    let parcel: Array[String] iso = recover iso
+      let notes = Array[String]
+      notes.push(&quot;first&quot;)
+      notes
+    end
+    archive.accept(consume parcel)
+</code></pre></figure>
+<p class="output">Expected output: <code>2</code>.</p>
+<p><code>archive</code> is an actor address, <code>Archivist tag</code>. The sender builds a mutable parcel, then <code>consume parcel</code> relinquishes access when sending it. The receiving behavior gets the isolated reference. It then consumes that iso into a local ref, deliberately giving up the need to transfer this particular array again. Ordinary local methods become straightforward.</p>
+<p>The behavior’s body produces no synchronous calculated result for the caller. To return a result from a worker, send a message back to a reply actor. Do not write code that assumes the statement after a behavior call runs after the behavior completes.</p>
+<h3>Three message shapes worth memorizing</h3>
+<table><thead><tr><th>Message argument</th><th>Sender’s action</th><th>Useful when</th></tr></thead><tbody>
+<tr><td><code>Array[String] val</code></td><td>Pass it normally; keep reading or send again</td><td>Many actors need the same stable result</td></tr>
+<tr><td><code>Array[String] iso</code></td><td>Move a named parcel with consume</td><td>One receiver should own mutable work</td></tr>
+<tr><td><code>Worker tag</code></td><td>Pass the actor address normally</td><td>Another actor needs to send it messages</td></tr>
+</tbody></table>
+<p><code>box</code> is not a substitute for <code>val</code> here. A local writer could still exist. <code>trn</code> is not a substitute for iso: its local box aliases could keep reading after the receiver began writing. Freeze the trn value to val before sharing it.</p>
+<h3>Reference capability versus object capability</h3>
+<p>The suffix <code>tag</code> controls access to a reference. The <code>OutStream</code> object itself grants the practical ability to send output. Passing <code>env.out</code> to Archivist gives that actor output authority. These are related security ideas but different uses of the word “capability.” Passing the narrow dependency also resembles constructor injection in Java.</p>
+<details class="exercise"><summary>Exercise 7 · Send the same result to two actors. Which representation fits?</summary><p>Use <code>Array[String] val</code> and change the receiving behavior to take val. Both calls can use the same variable. Sending an iso twice would require creating two independent parcels or receiving the first one back before transferring it again.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/types/actors">Actors</a>, <a href="https://tutorial.ponylang.io/reference-capabilities/passing-and-sharing">Passing and sharing</a>, <a href="https://tutorial.ponylang.io/object-capabilities/object-capabilities">Object capabilities</a>.</p>
+</section>
+<section id="generics" data-title="08 · Generics and arrows">
+<h2>08 · Read a generic signature in layers</h2>
+<p>A generic definition must be valid for every type and capability allowed by its bound. Java-style intuition about <code>T</code> as an unrestricted copyable object reference will get you stuck when <code>A</code> might be an iso value. Begin with the narrow set of capabilities your abstraction actually needs.</p>
+<figure class="program"><figcaption><a href="../examples/06-generics/main.pony">examples/06-generics/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>class Slot[A: Any #read]
+  let _value: A
+  new create(value: A) =&gt; _value = value
+  fun box get(): this-&gt;A =&gt; _value
+
+class Notebook
+  let _notes: Array[String] = Array[String]
+  fun ref add(note: String) =&gt; _notes.push(note)
+  fun box size(): USize =&gt; _notes.size()
+
+actor Main
+  new create(env: Env) =&gt;
+    let book: Notebook ref = Notebook
+    book.add(&quot;first&quot;)
+    let slot = Slot[Notebook ref](book)
+    let read: Notebook box = slot.get()
+    env.out.print(read.size().string())
+    let title = Slot[String val](&quot;Pony lab&quot;)
+    env.out.print(title.get())
+</code></pre></figure>
+<p class="output">Expected output: <code>1</code>, then <code>Pony lab</code>.</p>
+<h3>Decode Slot</h3>
+<p><code>A: Any #read</code> admits types with <code>ref</code>, <code>val</code> or <code>box</code> capability. Each can be aliased without duplicating a unique writer. The constructor can store the argument in <code>_value</code>. The <code>box</code> getter cannot blindly return A unchanged, because A might be a mutable reference and the Slot might only be readable.</p>
+<p><code>this-&gt;A</code> means “A as seen through the actual receiver’s viewpoint.” For a <code>Slot[Notebook ref] ref</code>, the getter can provide Notebook ref. For a <code>Slot[Notebook ref] box</code>, it provides Notebook box. For the immutable String value, it provides String val. The annotation <code>let read: Notebook box</code> in this example deliberately accepts the weaker view even though the mutable slot can provide ref.</p>
+<p>An arrow is a type-level viewpoint operation, not a pointer dereference or a function-return arrow. In a generic container it keeps the result tied to the access the caller actually has. If an API should <em>always</em> hide mutation, use an explicitly box result for that concrete API, as <code>Notebook.notes()</code> does; a viewpoint-dependent result may intentionally expose ref to a ref caller.</p>
+<table><thead><tr><th>Constraint</th><th>Accepted capability set</th><th>Design intent</th></tr></thead><tbody>
+<tr><td><code>A: Any val</code></td><td>val</td><td>Immutable values only</td></tr>
+<tr><td><code>A: Any #read</code></td><td>ref, val, box</td><td>Values usable through ordinary readable views</td></tr>
+<tr><td><code>A: Any #send</code></td><td>iso, val, tag</td><td>Message-safe values; iso still needs moves</td></tr>
+<tr><td><code>A: Any #share</code></td><td>val, tag</td><td>Values that can be shared repeatedly</td></tr>
+<tr><td><code>A: Any #any</code> or unconstrained A</td><td>All six</td><td>Must handle uniqueness and opacity too</td></tr>
+</tbody></table>
+<p><code>#read</code> is the name of a capability set, not a promise that every other capability is unreadable. Iso and trn support reads under their uniqueness rules, but they are deliberately outside this set. The qualifiers are compile-time bounds, not seventh or eighth reference capabilities.</p>
+<h3>Why a completely generic getter gets harder</h3>
+<pre><code>// Deliberately broken when A is unrestricted.
+class Slot[A]
+  let _value: A
+  new create(value: A) => _value = consume value
+  fun box get(): A => _value</code></pre>
+<p>If A could be iso, returning it as another iso would duplicate the owner. Adding <code>this-&gt;</code> addresses viewpoints, but you must also account for aliasing of unique values. Signatures such as <code>this-&gt;A!</code> express an adapted safe alias, rather than promising to hand back another owner. Supporting an iso container may require a take/remove operation using destructive read rather than a conventional getter.</p>
+<p>When reading standard-library methods, identify the receiver first, then the element type, then any <code>-&gt;</code>, <code>!</code> or <code>^</code>, then <code>?</code>. Many daunting signatures are just those four rules layered together. Avoid writing a maximally generic abstraction until you have two concrete uses that require it.</p>
+<details class="exercise"><summary>Exercise 8 · What changes if Slot.get is called through a box slot?</summary><p>Add <code>let slot_view: Slot[Notebook ref] box = slot</code>, then <code>let read_view: Notebook box = slot_view.get()</code>. Reading size works. Calling <code>read_view.add</code> does not: the box origin cannot expose a mutable ref. This is the same field rule from chapter 04, preserved by the arrow type.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/reference-capabilities/arrow-types">Arrow types</a>, <a href="https://tutorial.ponylang.io/generics/generic-constraints.html">Constraints</a>, <a href="https://tutorial.ponylang.io/generics/generics-and-reference-capabilities">Generics and capabilities</a>.</p>
+</section>
+<section id="trn" data-title="09 · Builders and destructive read">
+<h2>09 · Two patterns for the remaining sharp edges</h2>
+<p>Return to this chapter when the earlier stages feel comfortable. These patterns explain why <code>trn</code> exists and how to hand out a unique value stored in a field.</p>
+<figure class="program"><figcaption><a href="../examples/07-trn-and-drain/main.pony">examples/07-trn-and-drain/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>class Outbox
+  var _pending: Array[String] iso = recover iso Array[String] end
+  fun ref enqueue(note: String) =&gt; _pending.push(note)
+  fun ref drain(): Array[String] iso^ =&gt;
+    _pending = recover iso Array[String] end
+
+actor Main
+  new create(env: Env) =&gt;
+    let draft: Array[String] trn = recover trn Array[String] end
+    draft.push(&quot;first&quot;)
+    let view: Array[String] box = draft
+    env.out.print(view.size().string())
+    let frozen: Array[String] val = consume val draft
+    env.out.print(frozen.size().string())
+    let outbox: Outbox ref = Outbox
+    outbox.enqueue(&quot;queued&quot;)
+    let parcel: Array[String] iso = outbox.drain()
+    env.out.print(parcel.size().string())
+    let empty: Array[String] iso = outbox.drain()
+    env.out.print(empty.size().string())
+</code></pre></figure>
+<p class="output">Expected output: <code>1</code>, <code>1</code>, <code>1</code>, <code>0</code>.</p>
+<h3>One writer, then no writers</h3>
+<p><code>draft</code> is trn: it is the only writer. <code>view</code> is a legal local box alias. <code>consume val draft</code> relinquishes the writer and creates an immutable reference. The existing box view remains safe: it never promised the object would remain mutable. It can still read the now-frozen state.</p>
+<p>This explains a practical difference from iso. If <code>draft</code> were iso, retaining a readable <code>view</code> would break isolation. Trn is useful when local readers should coexist with construction, while preserving a future freeze operation. Most small programs can introduce trn only at that point.</p>
+<h3>Move a field by replacing it</h3>
+<p><code>consume</code> works on locals and parameters, not on fields: leaving a field empty would be unsafe if the containing object were accessed through another alias. Pony assignment instead evaluates to the <em>previous value</em> of its left side. In <code>drain</code>, the field receives a fresh empty iso array, and the old iso array is returned as an ephemeral result.</p>
+<pre><code>fun ref drain(): Array[String] iso^ =>
+  _pending = recover iso Array[String] end</code></pre>
+<p>The field always has a value. The first drain returns the queued note. The second returns an empty array. Returning <code>_pending</code> without replacing it would try to create a second isolated owner. This pattern is called <strong>destructive read</strong>; it transfers the old reference without destroying the array.</p>
+<p>The assignment rule also matters in mundane setters. If a method explicitly returns a value and its last expression is <code>field = new_value</code>, it returns the old value. Write an explicit final expression when you intend another result.</p>
+<details class="exercise"><summary>Exercise 9 · Why does drain require a ref receiver?</summary><p>It replaces <code>_pending</code>, so it must mutate the Outbox. A box receiver cannot do that. A method that merely reports the count could use box, subject to the field’s viewpoint and access rules.</p></details>
+<p class="source">References: <a href="https://tutorial.ponylang.io/reference-capabilities/consume-and-destructive-read">Destructive read</a>, <a href="https://tutorial.ponylang.io/reference-capabilities/guarantees.html">Trn guarantees</a>.</p>
+</section>
+<section id="capstone" data-title="10 · Finish a small program">
+<h2>10 · A complete command-line notes program</h2>
+<p>This stage takes command-line arguments as notes, builds mutable state locally, freezes a snapshot, and sends it to a Printer actor. The extra actor exists to exercise the message boundary; a production tool this small could print directly from Main.</p>
+<figure class="program"><figcaption><a href="../examples/08-notes-cli/main.pony">examples/08-notes-cli/main.pony</a><button class="copy" type="button">Copy code</button></figcaption><pre><code>use &quot;collections&quot;
+
+class Notebook
+  let _notes: Array[String] = Array[String]
+  fun ref add(note: String) =&gt; _notes.push(note)
+  fun box snapshot(): Array[String] val =&gt;
+    let result = recover trn Array[String] end
+    for note in _notes.values() do result.push(note) end
+    consume val result
+
+actor Printer
+  let _out: OutStream
+  new create(out: OutStream) =&gt; _out = out
+  be show(notes: Array[String] val) =&gt;
+    for note in notes.values() do _out.print(note) end
+    _out.print(&quot;Total: &quot; + notes.size().string())
+
+actor Main
+  new create(env: Env) =&gt;
+    if env.args.size() == 1 then
+      env.out.print(&quot;Usage: notes &lt;note&gt; [&lt;note&gt; ...]&quot;)
+      return
+    end
+    let book: Notebook ref = Notebook
+    for i in Range[USize].till(1, env.args.size()) do
+      try book.add(env.args(i)?) end
+    end
+    let frozen: Array[String] val = book.snapshot()
+    Printer(env.out).show(frozen)
+</code></pre></figure>
+<pre><code>ponyc examples/08-notes-cli -o .build -b notes
+./.build/notes "learn views" "move a parcel"
+# learn views
+# move a parcel
+# Total: 2</code></pre>
+<p><code>use "collections"</code> brings in <code>Range</code>. The first command-line argument is the executable name, so <code>Range[USize].till(1, env.args.size())</code> starts at 1 and excludes <code>env.args.size()</code>. Pony 0.78 uses the named constructor <code>till</code> for an exclusive far bound. Array lookup remains partial even though the loop bounds are sensible: the compiler does not prove that arbitrary index arithmetic is in bounds. Here, the empty <code>try</code> handler skips an unexpected lookup failure; for user input parsing, report invalid data explicitly instead of silently dropping it.</p>
+<h3>The ownership review you should be able to give</h3>
+<ol>
+<li><code>book: Notebook ref</code> is local working state. It needs mutation and ordinary local aliases.</li>
+<li><code>_notes: Array[String] ref</code> is private mutable storage. Its immutable String elements can be reused in snapshots.</li>
+<li><code>snapshot()</code> has a box receiver because reading the notebook is enough. It allocates a separate array.</li>
+<li><code>result</code> is trn while built, then consumed into val. No writer to the result survives.</li>
+<li><code>Printer</code> receives <code>Array[String] val</code>. Main may keep that snapshot because it cannot race a writer.</li>
+<li><code>_out: OutStream</code> is an actor reference. Printer sends output messages through it.</li>
+</ol>
+<h3>Three small extensions</h3>
+<details class="exercise"><summary>A · Print numbered notes</summary><p>Inside <code>Printer.show</code>, start a <code>var index: USize = 1</code>, print <code>index.string() + ". " + note</code>, then increment it. The counter is local mutable state. The notes stay val.</p></details>
+<details class="exercise"><summary>B · Add a title without changing the ownership design</summary><p>Add <code>let title: String</code> and a constructor parameter to Notebook. Pass title as a separate immutable String argument to <code>Printer.show</code>. No additional capability machinery is needed. This is a useful test of whether you can change functionality without randomly changing ownership.</p></details>
+<details class="exercise"><summary>C · Give the printer mutable ownership instead</summary><p>Change the message parameter to <code>Array[String] iso</code>. Build an iso parcel separately, move it with <code>consume</code>, and consume it into a local ref in Printer as in stage 05. The sender must stop using that parcel. Keeping the original mutable notebook is fine if the parcel contains a separate copied array of immutable Strings.</p></details>
+<p>You are ready to build small programs when you can recreate this structure from an empty directory and explain the six ownership decisions above. Memorizing the full capability matrix is a less useful milestone.</p>
+</section>
+<section id="errors" data-title="11 · A compiler-error clinic">
+<h2>11 · Repair the violated guarantee</h2>
+<p>Read a capability diagnostic from the immediate mismatch outward. Write down the actual expression type, the required type, and whether this line stores an alias, moves a value, calls a method, accesses a field, or crosses an actor boundary. Then choose a repair that preserves the program’s intent.</p>
+<div class="callout"><strong>A repair order that saves time</strong><p>Check the concrete type and numeric type first. Then check the receiver capability. Then check viewpoint adaptation and aliasing. Only then decide whether the design needs a move, a snapshot, or another ownership boundary.</p></div>
+<p>Each case below is a separate deliberately broken package in <code>failures/</code>. The diagnostics are captured from the installed compiler. The verifier checks the intended reason as well as the nonzero exit code. Fix cases in a copy so that the original rejection checks remain reproducible.</p>
+<details class="failure"><summary>01-box-write</summary><p><a href="../failures/01-box-write/main.pony">Open broken source</a></p><pre><code>class Notebook
+  var count: USize = 0
+  fun ref add() =&gt; count = count + 1
+actor Main
+  new create(env: Env) =&gt;
+    let book: Notebook ref = Notebook
+    let view: Notebook box = book
+    view.add()
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/01-box-write/main.pony:8:13: receiver type is not a subtype of target type
+    view.add()
+            ^
+    Info:
+    failures/01-box-write/main.pony:8:5: receiver type: Notebook box
+        view.add()
+        ^
+    failures/01-box-write/main.pony:3:3: target type: Notebook ref^
+      fun ref add() =&gt; count = count + 1
+      ^
+    failures/01-box-write/main.pony:7:15: Notebook box is not a subtype of Notebook ref^: box is not a subcap of ref^
+        let view: Notebook box = book
+                  ^
+</code></pre></details>
+<p><strong>Reason:</strong> the call requires a mutable receiver but <code>view</code> supplies box. <strong>Repair:</strong> call through the existing <code>book</code> ref. If this API should permit mutation, give its caller a ref deliberately. Adding consume to a box reference cannot manufacture write access.</p>
+<details class="failure"><summary>02-iso-alias</summary><p><a href="../failures/02-iso-alias/main.pony">Open broken source</a></p><pre><code>actor Main
+  new create(env: Env) =&gt;
+    let parcel: Array[String] iso = recover iso Array[String] end
+    let second: Array[String] iso = parcel
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/02-iso-alias/main.pony:4:35: right side must be a subtype of left side
+    let second: Array[String] iso = parcel
+                                  ^
+    Info:
+    failures/02-iso-alias/main.pony:3:17: Array[String val] iso is not a subtype of Array[String val] iso^: iso is not a subcap of iso^
+        let parcel: Array[String] iso = recover iso Array[String] end
+                    ^
+    failures/02-iso-alias/main.pony:3:31: this would be possible if the subcap were more ephemeral. Perhaps you meant to consume this variable
+        let parcel: Array[String] iso = recover iso Array[String] end
+                                  ^
+</code></pre></details>
+<p><strong>Reason:</strong> ordinary assignment would retain the original isolated owner and introduce another. <strong>Repair:</strong> initialize second with <code>consume parcel</code>. If only identity is needed, use a tag alias. If both names must read the content, publish val instead.</p>
+<details class="failure"><summary>03-send-ref</summary><p><a href="../failures/03-send-ref/main.pony">Open broken source</a></p><pre><code>actor Printer
+  be show(notes: Array[String] ref) =&gt; None
+actor Main
+  new create(env: Env) =&gt; None
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/03-send-ref/main.pony:2:11: this parameter must be sendable (iso, val or tag)
+  be show(notes: Array[String] ref) =&gt; None
+          ^
+</code></pre></details>
+<p><strong>Reason:</strong> a behavior parameter must cross an actor boundary safely. Ref permits local writers and readers. <strong>Repair:</strong> choose a val snapshot or an iso ownership transfer, then update the sender to construct that representation. Changing only the declaration to box still fails.</p>
+<details class="failure"><summary>04-freeze-ref</summary><p><a href="../failures/04-freeze-ref/main.pony">Open broken source</a></p><pre><code>actor Main
+  new create(env: Env) =&gt;
+    let notes: Array[String] ref = Array[String]
+    let frozen: Array[String] val = consume notes
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/04-freeze-ref/main.pony:4:35: right side must be a subtype of left side
+    let frozen: Array[String] val = consume notes
+                                  ^
+    Info:
+    failures/04-freeze-ref/main.pony:3:16: Array[String val] ref^ is not a subtype of Array[String val] val^: ref^ is not a subcap of val^
+        let notes: Array[String] ref = Array[String]
+                   ^
+</code></pre></details>
+<p><strong>Reason:</strong> consume removes one binding, not other potential writers. <strong>Repair:</strong> build immutable data in recover, copy into a snapshot, or start with iso/trn when uniqueness is part of the intended lifecycle. Do not treat a capability annotation as a cast.</p>
+<details class="failure"><summary>05-use-after-consume</summary><p><a href="../failures/05-use-after-consume/main.pony">Open broken source</a></p><pre><code>actor Main
+  new create(env: Env) =&gt;
+    let parcel: Array[String] iso = recover iso Array[String] end
+    let moved: Array[String] iso = consume parcel
+    env.out.print(parcel.size().string())
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/05-use-after-consume/main.pony:5:19: can&#x27;t use a consumed local or field in an expression
+    env.out.print(parcel.size().string())
+                  ^
+</code></pre></details>
+<p><strong>Reason:</strong> the old binding has been invalidated. <strong>Repair:</strong> use the new owner, compute the required summary before moving, or redesign around immutable shared data. The old object still exists; the old name cannot access it.</p>
+<details class="failure"><summary>06-leaking-getter</summary><p><a href="../failures/06-leaking-getter/main.pony">Open broken source</a></p><pre><code>class Notebook
+  let _notes: Array[String] = Array[String]
+  fun box notes(): Array[String] ref =&gt; _notes
+actor Main
+  new create(env: Env) =&gt; None
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/06-leaking-getter/main.pony:3:41: function body isn&#x27;t the result type
+  fun box notes(): Array[String] ref =&gt; _notes
+                                        ^
+    Info:
+    failures/06-leaking-getter/main.pony:3:20: function return type: Array[String val] ref
+      fun box notes(): Array[String] ref =&gt; _notes
+                       ^
+    failures/06-leaking-getter/main.pony:3:41: function body type: this-&gt;Array[String val] ref
+      fun box notes(): Array[String] ref =&gt; _notes
+                                            ^
+    failures/06-leaking-getter/main.pony:2:15: Array[String val] box is not a subtype of Array[String val] ref: box is not a subcap of ref
+      let _notes: Array[String] = Array[String]
+                  ^
+</code></pre></details>
+<p><strong>Reason:</strong> a ref field seen through a box receiver is box. <strong>Repair:</strong> return <code>Array[String] box</code> for a read-only API. Use a ref receiver for an intentionally mutable accessor, or return an independent val snapshot.</p>
+<details class="failure"><summary>07-generic-getter</summary><p><a href="../failures/07-generic-getter/main.pony">Open broken source</a></p><pre><code>class Slot[A]
+  let _value: A
+  new create(value: A) =&gt; _value = consume value
+  fun box get(): A =&gt; _value
+actor Main
+  new create(env: Env) =&gt; None
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/07-generic-getter/main.pony:4:23: function body isn&#x27;t the result type
+  fun box get(): A =&gt; _value
+                      ^
+    Info:
+    failures/07-generic-getter/main.pony:4:18: function return type: A #any
+      fun box get(): A =&gt; _value
+                     ^
+    failures/07-generic-getter/main.pony:4:23: function body type: this-&gt;A #any
+      fun box get(): A =&gt; _value
+                          ^
+    failures/07-generic-getter/main.pony:4:23: A tag is not a subtype of A iso: the subtype has no constraint
+      fun box get(): A =&gt; _value
+                          ^
+    failures/07-generic-getter/main.pony:4:23: A box is not a subtype of A trn: the subtype has no constraint
+      fun box get(): A =&gt; _value
+                          ^
+    failures/07-generic-getter/main.pony:4:23: A box is not a subtype of A ref: the subtype has no constraint
+      fun box get(): A =&gt; _value
+                          ^
+    failures/07-generic-getter/main.pony:4:23: (this-&gt;A iso, this-&gt;A trn, this-&gt;A ref, this-&gt;A val, this-&gt;A box, this-&gt;A tag) is not a pairwise subtype of (A iso, A trn, A ref, A val, A box, A tag)
+      fun box get(): A =&gt; _value
+                          ^
+</code></pre></details>
+<p><strong>Reason:</strong> unrestricted A can include unique capabilities, and a box receiver also affects the field’s viewpoint. <strong>Repair:</strong> use the chapter 08 <code>#read</code> bound plus <code>this-&gt;A</code> if those are the intended inputs. A genuinely unrestricted container needs explicit alias/move handling.</p>
+<details class="failure"><summary>08-recover-capture</summary><p><a href="../failures/08-recover-capture/main.pony">Open broken source</a></p><pre><code>actor Main
+  new create(env: Env) =&gt;
+    let notes: Array[String] ref = Array[String]
+    let frozen: Array[String] val = recover val notes end
+</code></pre><p class="diagnostic-label">Actual compiler diagnostic</p><pre class="diagnostic"><code>Error:
+failures/08-recover-capture/main.pony:4:37: can&#x27;t recover to this capability
+    let frozen: Array[String] val = recover val notes end
+                                    ^
+    Info:
+    failures/08-recover-capture/main.pony:4:49: expression type is Array[String val] tag
+        let frozen: Array[String] val = recover val notes end
+                                                    ^
+</code></pre></details>
+<p><strong>Reason:</strong> the region tries to turn an external mutable reference into val. The diagnostic shows that the captured value is only available here as tag, which cannot be recovered into a readable immutable reference. <strong>Repair:</strong> allocate the graph inside recover, or copy sendable values into a new iso/trn builder as the snapshot method does. Wrapping the existing writer in recover does not establish isolation.</p>
+<h3>Other recurring messages</h3>
+<table><thead><tr><th>Symptom</th><th>Check</th></tr></thead><tbody>
+<tr><td>A surprising iso where you expected ref</td><td>Annotate the local as ref when local sharing is intended. Constructor recovery and inference can preserve stronger capabilities.</td></tr>
+<tr><td>A type ending in ^</td><td>Is the expression ephemeral? Does the destination require a move rather than another named reference?</td></tr>
+<tr><td>Two numeric types do not match</td><td>Pony does not generally perform Java-style numeric widening. Match the API’s type, such as USize, or convert explicitly with methods such as <code>.usize()</code>.</td></tr>
+<tr><td>A partial call is rejected</td><td>Supply the call-site <code>?</code>, then handle it with try or propagate it from a partial function.</td></tr>
+</tbody></table>
+</section>
+<section id="desk" data-title="12 · Desk reference">
+<h2>12 · Keep this beside your editor</h2>
+<h3>Start with these defaults in your own designs</h3>
+<ul>
+<li>Local working object: <code>T ref</code>.</li>
+<li>Synchronous method that only reads its receiver: <code>fun box</code>.</li>
+<li>Method that mutates its receiver: <code>fun ref</code>.</li>
+<li>Read-only local input: <code>T box</code>; it need not be permanently frozen.</li>
+<li>Stable data that must be sent or retained by several actors: <code>T val</code>.</li>
+<li>Mutable data whose ownership must move: <code>T iso</code>, then consume a named owner at transfer.</li>
+<li>A single writer whose result will be frozen: <code>T trn</code>, then <code>consume val</code>.</li>
+<li>Actor address: <code>Worker tag</code>.</li>
+</ul>
+<h3>Symbol lookup</h3>
+<table><thead><tr><th>Symbol</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>let / var</code></td><td>Binding reassignment rule; independent of object mutability.</td></tr>
+<tr><td><code>ref / box / val / iso / trn / tag</code></td><td>Reference access and alias guarantees.</td></tr>
+<tr><td><code>^</code></td><td>Ephemeral expression type, typically from moving a value.</td></tr>
+<tr><td><code>!</code> in a type</td><td>Safe alias type; especially relevant for generic values.</td></tr>
+<tr><td><code>this-&gt;A</code></td><td>A viewed through the receiver capability.</td></tr>
+<tr><td><code>#read / #send / #share / #any</code></td><td>Sets of allowed capabilities in a generic bound.</td></tr>
+<tr><td><code>?</code> after a call</td><td>A partial operation; handle or propagate its error.</td></tr>
+<tr><td><code>| / &amp; / ,</code> in type expressions</td><td>Alternative / simultaneous contracts / tuple components.</td></tr>
+<tr><td><code>consume x</code></td><td>Move from a local or parameter, invalidating that binding.</td></tr>
+<tr><td><code>recover val … end</code></td><td>Establish a region whose result can be immutable.</td></tr>
+<tr><td><code>field = replacement</code></td><td>Assign replacement, evaluate to the old field value.</td></tr>
+</tbody></table>
+<h3>Design before annotation</h3>
+<p>Draw one box for each actor. Put mutable working objects inside their owning actor. For every arrow between actors, decide whether it carries shared immutable data, a moved mutable parcel, or an actor address. Only then write the capability suffixes. If a single value needs contradictory properties, split working state from published results.</p>
+<h3>When you need an official reference</h3>
+<p>The chapter links are the targeted reading path. The <a href="https://tutorial.ponylang.io/">official tutorial</a> is the language narrative; the <a href="https://stdlib.ponylang.io/">standard-library documentation</a> answers exact API questions; the <a href="https://patterns.ponylang.io/">Pony Patterns book</a> helps when you need a larger design. Check API signatures against your installed compiler’s library version if the online docs have moved ahead.</p>
+<h3>Explain these without looking back</h3>
+<ol>
+<li>Why can a let binding still name a mutable array?</li>
+<li>Why can ref satisfy box, but box cannot satisfy val?</li>
+<li>Which alias would <code>let other: T iso = owner</code> create?</li>
+<li>What does consume invalidate, and what does it leave alive?</li>
+<li>Why does a box getter see a ref field as box?</li>
+<li>Why does an actor accept val or iso, but not box?</li>
+<li>What does <code>this-&gt;A</code> preserve for a caller?</li>
+<li>Why must moving a field also replace its value?</li>
+</ol>
+<details><summary>Answers in eight sentences</summary><ol><li>Let fixes the binding; the reference capability controls object access.</li><li>Ref supplies read access; box supplies no proof that writers are absent.</li><li>It attempts a second isolated readable/writable owner while retaining the first.</li><li>It invalidates that local or parameter binding; the object and any permitted other aliases survive.</li><li>A read-only origin cannot grant mutable access through its fields.</li><li>Val forbids writers and iso transfers the owner; box can coexist with a local writer.</li><li>It adapts the returned type to the actual receiver’s viewpoint.</li><li>Another alias might access the containing object, so the field must never be empty.</li></ol></details>
+<p class="closing">The useful habit is to tell a short ownership story for your program. The compiler then checks that your code keeps the promises in that story.</p>
+</section>
+<footer>Built from local source files. Working examples and intentional failures checked by <a href="../verify.py">verify.py</a>. Use your browser’s Find command to search the full handbook.</footer></main>
+<div id="copy-status" role="status" aria-live="polite"></div><script>'use strict';
+const jobs = {
+  ref: ['ref', 'Keep the mutable notebook inside its actor. Local aliases may read and write it. See stage 01.'],
+  box: ['box', 'Accept a readable view. A local writer may still change the object. Do not send this view to another actor. See stage 03.'],
+  val: ['val', 'Publish an immutable result. Retain it and send it repeatedly. Build a snapshot or give up a unique writer. See stage 04.'],
+  iso: ['iso', 'Transfer mutable ownership. Move a named parcel with consume; the sender loses access through that binding. See stage 05.'],
+  trn: ['trn', 'Keep one writer and allow local box readers, then consume val to freeze. See stage 07.'],
+  tag: ['tag', 'Keep an actor address and send behaviors. This reference does not allow reading the actor’s fields. See stage 05.']
+};
+const selector = document.getElementById('cap-job');
+const answer = document.getElementById('cap-answer');
+function explainJob() {
+  const [cap, explanation] = jobs[selector.value];
+  answer.replaceChildren();
+  const code = document.createElement('code'); code.textContent = cap;
+  answer.append(code, document.createTextNode(' — ' + explanation));
+}
+selector.addEventListener('change', explainJob); explainJob();
+const links = [...document.querySelectorAll('nav a')];
+function markCurrent(id) {
+  links.forEach(link => {
+    if (link.hash === '#' + id) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
+}
+const observer = new IntersectionObserver(entries => {
+  for (const entry of entries) if (entry.isIntersecting) markCurrent(entry.target.id);
+}, {rootMargin: '-5% 0px -80% 0px', threshold: 0});
+document.querySelectorAll('section').forEach(section => observer.observe(section));
+links.forEach(link => link.addEventListener('click', () => markCurrent(link.hash.slice(1))));
+let statusTimer;
+document.querySelectorAll('.copy').forEach(button => {
+  button.addEventListener('click', async () => {
+    const code = button.closest('figure').querySelector('pre code').textContent;
+    const status = document.getElementById('copy-status');
+    try {await navigator.clipboard.writeText(code); status.textContent = 'Code copied';}
+    catch {status.textContent = 'Select the code and copy with your keyboard.';}
+    clearTimeout(statusTimer);statusTimer = setTimeout(() => {status.textContent = '';}, 3000);
+  });
+});
+document.getElementById('print').addEventListener('click', () => window.print());
+let previouslyClosed = [];
+window.addEventListener('beforeprint', () => {
+  previouslyClosed = [...document.querySelectorAll('details:not([open])')];
+  previouslyClosed.forEach(detail => {detail.open = true;});
+});
+window.addEventListener('afterprint', () => {
+  previouslyClosed.forEach(detail => {detail.open = false;});
+});
+</script></body></html>
